@@ -1,60 +1,75 @@
-# 🐍 Python Coding — Data Handling, Functions & Web Scraping
+# 🔐 IoT Security Projects — ESP32 DevKit V1
 
-A learning-focused collection of Python scripts covering some of the most practical day-to-day skills in data work: cleaning messy data, handling missing values with **pandas**, writing reusable **functions**, and pulling content from the web with **BeautifulSoup**. 📊🧹🌐
+A growing collection of **ESP32-based IoT, security, and embedded systems projects** — from password vaults and motion-sensitive displays to browser-controlled robots and tiny web apps that run entirely off your microcontroller. 🚀
 
 ---
 
 ## 📦 About This Repository
 
-This repo is a hands-on practice log built while learning core Python and data-handling concepts. Each script is small, focused, and meant to demonstrate **one concept at a time** — perfect for revisiting fundamentals or as a quick reference.
+This repo is a personal playground and project archive for everything built on the **ESP32 DevKit V1**. The focus areas include:
 
-### Topics Covered
-- 🧹 **Data Handling** — cleaning DataFrames, handling missing values (`dropna`, `fillna`), basic DataFrame manipulation
-- 🔁 **Functions** — loops, conditionals, user input handling, simple interactive programs
-- 🌐 **Web Scraping** — fetching and parsing HTML pages with `requests` + `BeautifulSoup`
-- 📄 **CSV / JSON / PDF** *(work in progress)* — reading and processing structured data files
+- 🛡️ **Security-oriented IoT devices** — password vaults, login-gated web servers, OTA-secured firmware updates
+- 🖥️ **Display-based gadgets** — ST7735 TFT screens used for games, sensor graphs, and live chat displays
+- 🌐 **Browser-controlled hardware** — motors, sensors, and games served straight from the ESP32's own web server
+
+Each project is self-contained as a single `.ino` sketch, so you can grab exactly what you need without pulling in the whole repo.
 
 ---
 
 ## 🗂️ Repository Structure
 
 ```
-Python-coding-Missing_Data_Handeling/
-├── 📁 data-handling/   → pandas scripts for DataFrames & missing-value handling
-└── 📁 Functions/        → standalone scripts on functions, input/loops, and web scraping
+iot-security-projects/
+├── 📁 display_module/    → ST7735 TFT display projects (games, graphs, chat UI)
+└── 📁 web-server/         → ESP32 web server projects (dashboards, games, vaults, OTA)
 ```
 
-Each sub-folder has its own `README.md` with details on every script inside.
+Every sub-folder contains:
+
+- 📄 One or more `.ino` Arduino sketches
+- 📘 Its own `README.md` with setup, wiring, and usage details
 
 ---
 
-## 🛠️ Requirements
+## 🛠️ General Requirements
 
-- 🐍 Python 3.x
-- 📦 Libraries used across the scripts:
-  ```bash
-  pip install pandas requests beautifulsoup4
-  ```
+### Hardware
+- ✅ ESP32 DevKit V1
+- ✅ USB cable (data-capable, not charge-only!)
+- ✅ Wi-Fi network for connectivity-based projects
+- ✅ Project-specific components (TFT display, sensors, motors, etc.)
 
----
-
-## ▶️ Running the Scripts
-
-1. Navigate into the relevant folder (`data-handling` or `Functions`).
-2. Run any script directly:
-   ```bash
-   python "script_name.py"
-   ```
-3. For scripts that read a CSV (like `unclean.csv`), make sure the file stays in the **same folder** as the script — paths are relative.
+### Software
+- ✅ [Arduino IDE](https://www.arduino.cc/en/software) or [Arduino Cloud](https://create.arduino.cc/)
+- ✅ ESP32 board package installed
+- ✅ Required libraries (listed per project)
 
 ---
 
-## 📌 Notes
+## ▶️ Getting Started
 
-- ✏️ These scripts are written as **learning exercises**, so some include intentionally messy/realistic data (e.g. `unclean.csv` has encoding issues, duplicate columns, and missing values — great for practicing data cleaning!).
-- 🌱 This is an evolving repo — CSV/JSON/PDF handling sections are planned additions.
-- 💬 Filenames and code may include small typos (e.g. "manupulation", "Usuing") kept as-is from the original learning notes.
+1. Pick a project folder (`display_module` or `web-server`).
+2. Open its `README.md` for specific instructions.
+3. Open the desired `.ino` file in Arduino IDE / Arduino Cloud.
+4. Select **ESP32 Dev Module** as the board.
+5. Install any missing libraries.
+6. Update Wi-Fi credentials (`ssid` / `password`) where needed.
+7. Compile, upload, and enjoy! 🎉
 
 ---
 
-⭐ A growing record of "learn by doing" — explore the folders, run the scripts, and tweak them to see what changes!
+## ⚠️ Important Notes
+
+- 🔑 Most projects use placeholder Wi-Fi credentials (`YOUR_WIFI_NAME`, `YOUR_WIFI_PASSWORD`) — **update these before flashing**.
+- 🔌 Pin numbers may need adjusting depending on your exact wiring.
+- 📚 Check the top of each `.ino` file for required libraries and notes.
+
+---
+
+## 📌 Disclaimer
+
+These projects are built for **learning, experimentation, and personal use**. Some include hardcoded test credentials in source code for demo purposes — always change these before deploying on a real network. 🔒
+
+---
+
+⭐ If you find something useful here, feel free to explore, fork, and build on it!
