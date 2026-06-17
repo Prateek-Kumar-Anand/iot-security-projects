@@ -11,6 +11,7 @@ This repo is a personal playground and project archive for everything built on t
 - 🛡️ **Security-oriented IoT devices** — password vaults, login-gated web servers, OTA-secured firmware updates
 - 🖥️ **Display-based gadgets** — ST7735 TFT screens used for games, sensor graphs, and live chat displays
 - 🌐 **Browser-controlled hardware** — motors, sensors, and games served straight from the ESP32's own web server
+- 🔘 **Manual hardware control** — physical button interfaces for real-time GPIO control
 
 Each project is self-contained as a single `.ino` sketch, so you can grab exactly what you need without pulling in the whole repo.
 
@@ -20,8 +21,9 @@ Each project is self-contained as a single `.ino` sketch, so you can grab exactl
 
 ```
 iot-security-projects/
-├── 📁 display_module/    → ST7735 TFT display projects (games, graphs, chat UI)
-└── 📁 web-server/         → ESP32 web server projects (dashboards, games, vaults, OTA)
+├── 📁 display_module/                → ST7735 TFT display projects (games, graphs, chat UI)
+├── 📁 manually-controling-projects/  → Physical button / GPIO control projects
+└── 📁 web-server/                    → ESP32 web server projects (dashboards, games, vaults, OTA)
 ```
 
 Every sub-folder contains:
@@ -31,28 +33,59 @@ Every sub-folder contains:
 
 ---
 
+## 🗺️ Project Index
+
+### 🖥️ [`display_module/`](./display_module/README.md)
+| Project | File | Description |
+|---|---|---|
+| 🧱 Block Game | `block_game.ino` | Tetris-style falling block game on a 128×160 TFT |
+| 💬 ESP32 ↔ TFT Chat | `esp32_st7735_chat.ino` | Browser → ESP32 → TFT live message board |
+| 🌡️ DHT11 Live Graph | `esp32_dht11_display_graph.ino` | Scrolling temp & humidity graph on TFT |
+
+### 🔘 [`manually-controling-projects/`](./manually-controling-projects/README.md)
+| Project | File | Description |
+|---|---|---|
+| 💡 Button Light Control | `ESP32_Button_Light_Control.ino` | Two-button ON/OFF control for LED or relay |
+
+### 🌐 [`web-server/`](./web-server/README.md)
+| Project | File | Description |
+|---|---|---|
+| 🧮 Graphing Calculator | `ESP32_Advanced_Graphing_Calculator.ino` | Chart.js-powered function plotter |
+| 📐 Trig Visualizer | `Trigonometry_ratio_on_web_server.ino` | Interactive canvas trig grapher |
+| 🌡️ Temp & Humidity Dashboard | `Temperature_and_humidity_on_chrome.ino` | Live DHT11 sensor dashboard |
+| 🖼️ Picture Server | `Picture_on_web_server.ino` | Serve images from SPIFFS over HTTP |
+| 🎞️ GIF Server | `Web gif on esp32.ino` | Serve animated GIFs from the ESP32 |
+| 🚗 Motor Web Control | `esp32_motor_web_control.ino` | L298N DC motor control via browser |
+| ⭕ Tic-Tac-Toe | `esp32_tictactoe.ino` | In-browser multiplayer game from the ESP32 |
+| 💬 Offline Chat Room | `offline_web_server.ino` | Local network mini-chat server (no internet needed) |
+| 🔄 OTA Firmware Update | `ota_update.ino` | Wireless code uploads over Wi-Fi |
+| 🔐 Password Vault | `web password saving server from esp32.ino` | Login-gated NVS password storage |
+| 🍀 Hello / Good Luck Page | `Good_luck_on_web_browser.ino` | Beginner-friendly Wi-Fi + WebServer test |
+
+---
+
 ## 🛠️ General Requirements
 
 ### Hardware
 - ✅ ESP32 DevKit V1
 - ✅ USB cable (data-capable, not charge-only!)
 - ✅ Wi-Fi network for connectivity-based projects
-- ✅ Project-specific components (TFT display, sensors, motors, etc.)
+- ✅ Project-specific components (TFT display, sensors, motors, buttons — see each folder's README)
 
 ### Software
 - ✅ [Arduino IDE](https://www.arduino.cc/en/software) or [Arduino Cloud](https://create.arduino.cc/)
-- ✅ ESP32 board package installed
-- ✅ Required libraries (listed per project)
+- ✅ ESP32 board package installed (`https://espressif.github.io/arduino-esp32/package_esp32_index.json`)
+- ✅ Required libraries (listed per project in each subfolder's README)
 
 ---
 
 ## ▶️ Getting Started
 
-1. Pick a project folder (`display_module` or `web-server`).
-2. Open its `README.md` for specific instructions.
-3. Open the desired `.ino` file in Arduino IDE / Arduino Cloud.
+1. Pick a project folder.
+2. Open its `README.md` for specific wiring and setup instructions.
+3. Open the desired `.ino` file in Arduino IDE or Arduino Cloud.
 4. Select **ESP32 Dev Module** as the board.
-5. Install any missing libraries.
+5. Install any missing libraries via **Library Manager** (`Ctrl+Shift+I`).
 6. Update Wi-Fi credentials (`ssid` / `password`) where needed.
 7. Compile, upload, and enjoy! 🎉
 
@@ -62,7 +95,8 @@ Every sub-folder contains:
 
 - 🔑 Most projects use placeholder Wi-Fi credentials (`YOUR_WIFI_NAME`, `YOUR_WIFI_PASSWORD`) — **update these before flashing**.
 - 🔌 Pin numbers may need adjusting depending on your exact wiring.
-- 📚 Check the top of each `.ino` file for required libraries and notes.
+- 📚 Check the top of each `.ino` file for required libraries and any additional setup notes.
+- 🧪 These are learning and experimentation projects — harden credentials and configs before any real deployment.
 
 ---
 

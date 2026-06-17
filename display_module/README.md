@@ -1,6 +1,6 @@
 # 🖥️ ST7735 Display Projects — ESP32 DevKit V1
 
-A collection of fun and practical projects built around the **ST7735 TFT display module**, paired with the ESP32 DevKit V1. From simple "Hello World" screens to a fully playable Tetris-style game and live sensor graphs! 🎮📊
+A collection of fun and practical projects built around the **ST7735 TFT display module**, paired with the ESP32 DevKit V1. From a fully playable Tetris-style game to live sensor graphs and a real-time networked message board! 🎮📊
 
 ---
 
@@ -14,72 +14,103 @@ A collection of fun and practical projects built around the **ST7735 TFT display
 
 ---
 
-## 🔌 Wiring (Typical ST7735 Pinout)
+## 🔌 Wiring
+
+### ST7735 TFT — Common Pinout
 
 | ST7735 Pin | ESP32 Pin (example) |
 |---|---|
 | CS | GPIO 5 / 15 *(varies per project — check top of file)* |
 | DC | GPIO 2 / 16 |
 | RST | GPIO 4 / 17 |
-| SCK | Default SPI SCK |
-| SDA / MOSI | Default SPI MOSI |
+| SCK | Default SPI SCK (GPIO 18) |
+| SDA / MOSI | Default SPI MOSI (GPIO 23) |
 | VCC | 3.3V |
 | GND | GND |
 
 > ⚠️ **Pin numbers differ between projects!** Always check the `#define TFT_CS / TFT_DC / TFT_RST` lines at the top of each `.ino` file before wiring.
 
-For the **Block Game**, you'll also need 4 push buttons:
-- GPIO 12 → Left
-- GPIO 13 → Right
-- GPIO 14 → Rotate
-- GPIO 27 → Drop
+### Block Game — Additional Push Buttons
+
+| Button | ESP32 Pin |
+|---|---|
+| Left | GPIO 12 |
+| Right | GPIO 13 |
+| Rotate | GPIO 14 |
+| Drop | GPIO 27 |
+
+Wire each button between its GPIO pin and **GND**. The internal pull-up (`INPUT_PULLUP`) is used in code, so no external resistors are needed.
+
+### DHT11 Live Graph — Sensor Wiring
+
+| DHT11 Pin | ESP32 Pin |
+|---|---|
+| DATA | GPIO 4 |
+| VCC | 3.3V |
+| GND | GND |
 
 ---
 
 ## 📚 Required Libraries
 
-Install via Arduino Library Manager:
+Install via Arduino **Library Manager** (`Ctrl+Shift+I`):
 
-- `Adafruit GFX Library`
-- `Adafruit ST7735 and ST7789 Library`
-- `DHT sensor library` (for the graph project)
-- `WiFi` & `WebServer` (built-in, for the chat project)
+| Library | Projects |
+|---|---|
+| `Adafruit GFX Library` | All |
+| `Adafruit ST7735 and ST7789 Library` | All |
+| `DHT sensor library` | `esp32_dht11_display_graph.ino` |
+| `WiFi` *(built-in)* | `esp32_st7735_chat.ino` |
+| `WebServer` *(built-in)* | `esp32_st7735_chat.ino` |
 
 ---
 
 ## ▶️ Uploading the Code
 
-For the smoothest experience, use **Arduino Cloud**:
-
-1. Create a free [Arduino Cloud](https://create.arduino.cc/) account.
-2. Download the desired `.ino` file from this folder.
-3. Upload it as a new sketch in Arduino Cloud.
-4. Select **ESP32 Dev Module** as the target board.
-5. Install the libraries listed above if prompted.
-6. Click **Upload** to flash it to your ESP32.
-
-> 💡 You can also use the regular **Arduino IDE** — just make sure the ESP32 board package and libraries are installed.
+1. Open the desired `.ino` file in **Arduino IDE** or **Arduino Cloud**.
+2. Select **ESP32 Dev Module** as the target board.
+3. Install any missing libraries listed above.
+4. For Wi-Fi projects, update the credentials:
+   ```cpp
+   const char* ssid     = "YOUR_WIFI_NAME";
+   const char* password = "YOUR_WIFI_PASSWORD";
+   ```
+5. Click **Upload** (`Ctrl+U`) to flash.
+6. For the chat project, open **Serial Monitor** at `115200 baud` to get the ESP32's IP address, then visit it in your browser.
 
 ---
 
-## 🎮 Project Highlights
+## 🎮 Project Details
 
-### 🧱 Block Game
-A miniature Tetris running entirely on a microcontroller — grid logic, piece falling, line clearing, and a scoring system, all rendered on a 128×160 TFT.
+### 🧱 Block Game (`block_game.ino`)
 
-### 💬 ESP32 ↔ TFT Chat
-Connects to Wi-Fi, hosts a lightweight web page, and pushes any text you type straight onto the physical screen in real time. Great intro to combining `WebServer` + `Adafruit_GFX`.
+A miniature Tetris running entirely on a microcontroller — grid logic, piece falling, line clearing, and a scoring system, all rendered on a 128×160 TFT. Uses `Adafruit_ST7735` for rendering and reads 4 hardware buttons for input.
 
-### 🌡️ DHT11 Live Graph
-A self-updating environmental dashboard — no phone or laptop needed, just glance at the screen to see the temperature & humidity trend over time.
+- **Grid:** 10 columns × 20 rows, each cell 6×6 px
+- **Scoring:** Points per line cleared; speed increases with level
+- **Pins:** CS=15, DC=2, RST=4 | Buttons: 12, 13, 14, 27
+
+### 💬 ESP32 ↔ TFT Chat (`esp32_st7735_chat.ino`)
+
+Connects to Wi-Fi, hosts a minimal web page, and pushes any text you type straight onto the physical TFT screen in real time. A great intro to combining `WebServer` + `Adafruit_GFX`.
+
+- **Pins:** CS=5, DC=2, RST=4
+- **How to use:** Flash → get IP from Serial Monitor → open IP in browser → type and send
+
+### 🌡️ DHT11 Live Graph (`esp32_dht11_display_graph.ino`)
+
+A self-updating environmental dashboard — reads temperature and humidity every second and renders a scrolling line graph across the 128-pixel-wide display. No phone or laptop needed.
+
+- **Pins:** CS=5, DC=16, RST=17 | DHT11 DATA=4
+- **Display mode:** Landscape (`setRotation(1)`)
 
 ---
 
 ## ⚠️ Notes
 
-- 🔑 Update `ssid` / `password` placeholders before uploading Wi-Fi-based sketches.
-- 🖥️ Default display init is `tft.initR(INITR_BLACKTAB)` — change this if you're using a different ST7735 variant (red/green/black tab).
-- 🧩 Most code here can be adapted to other Adafruit GFX-compatible displays with minor pin/init changes.
+- 🖥️ Default display init is `tft.initR(INITR_BLACKTAB)` — change this if your ST7735 module has a **red tab** (`INITR_REDTAB`) or **green tab** (`INITR_GREENTAB`).
+- 🔑 Update `ssid` / `password` before uploading any Wi-Fi-based sketch.
+- 🧩 Most code here can be adapted to other `Adafruit_GFX`-compatible displays (ILI9341, SSD1306, etc.) with minor pin/init changes.
 
 ---
 
