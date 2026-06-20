@@ -1,3 +1,12 @@
+#include <WiFi.h>
+#include <WebServer.h>
+
+const char* ssid = "YOUR_WIFI_NAME";
+const char* password = "YOUR_WIFI_PASSWORD";
+
+WebServer server(80);
+
+const char webpage[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,12 +37,12 @@ select{
     <option value="cosec">cosec(x)</option>
     <option value="sec">sec(x)</option>
     <option value="cot">cot(x)</option>
-    <option value="asin">sin⁻¹(x)</option>
-    <option value="acos">cos⁻¹(x)</option>
-    <option value="atan">tan⁻¹(x)</option>
-    <option value="acosec">cosec⁻¹(x)</option>
-    <option value="asec">sec⁻¹(x)</option>
-    <option value="acot">cot⁻¹(x)</option>
+    <option value="asin">sin&#8315;&sup1;(x)</option>
+    <option value="acos">cos&#8315;&sup1;(x)</option>
+    <option value="atan">tan&#8315;&sup1;(x)</option>
+    <option value="acosec">cosec&#8315;&sup1;(x)</option>
+    <option value="asec">sec&#8315;&sup1;(x)</option>
+    <option value="acot">cot&#8315;&sup1;(x)</option>
 </select>
 <br>
 <canvas id="graph" width="1000" height="500"></canvas>
@@ -145,3 +154,34 @@ drawGraph();
 
 </body>
 </html>
+)rawliteral";
+
+void handleRoot() {
+  server.send(200, "text/html", webpage);
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println();
+  Serial.println("Connected!");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP());
+
+  server.on("/", handleRoot);
+  server.begin();
+
+  Serial.println("Web Server Started");
+}
+
+void loop() {
+  server.handleClient();
+}
