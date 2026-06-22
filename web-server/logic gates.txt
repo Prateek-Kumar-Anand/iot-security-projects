@@ -1,0 +1,105 @@
+#include <WiFi.h>
+#include <WebServer.h>
+
+// =====================
+// WiFi Credentials
+// =====================
+const char* ssid = "YOUR_WIFI_NAME";
+const char* password = "YOUR_WIFI_PASSWORD";
+
+// Web server on port 80
+WebServer server(80);
+
+// =====================
+// Input Pins
+// =====================
+const int A = 12;
+const int B = 14;
+
+// Read buttons (active LOW)
+bool readA() {
+  return !digitalRead(A);
+}
+
+bool readB() {
+  return !digitalRead(B);
+}
+
+// =====================
+// HTML Page Generator
+// =====================
+String getHTML() {
+
+  bool a = readA();
+  bool b = readB();
+
+  bool AND_gate = a && b;
+  bool OR_gate  = a || b;
+  bool NOT_A    = !a;
+  bool NOT_B    = !b;
+
+  String html = "<!DOCTYPE html><html>";
+  html += "<head>";
+  html += "<meta name='viewport' content='width=device-width, initial-scale=1'>";
+  html += "<meta http-equiv='refresh' content='1'>";
+
+  html += "<title>ESP32 Logic Gates</title>";
+  html += "<h2>ESP32 Logic Gates Demo</h2>";
+
+  html += "<style>body{font-family:Arial;text-align:center;} .box{padding:10px;margin:10px;border:1px solid #333;display:inline-block;}</style>";
+  html += "</head><body>";
+
+  html += "<div class='box'><b>Input A:</b> " + String(a) + "</div>";
+  html += "<div class='box'><b>Input B:</b> " + String(b) + "</div>";
+
+  html += "<hr>";
+
+  html += "<div class='box'><b>AND:</b> " + String(AND_gate) + "</div>";
+  html += "<div class='box'><b>OR:</b> " + String(OR_gate) + "</div>";
+  html += "<div class='box'><b>NOT A:</b> " + String(NOT_A) + "</div>";
+  html += "<div class='box'><b>NOT B:</b> " + String(NOT_B) + "</div>";
+
+  html += "</body></html>";
+
+  return html;
+}
+
+// =====================
+// Handle Root Page
+// =====================
+void handleRoot() {
+  server.send(200, "text/html", getHTML());
+}
+
+// =====================
+// Setup
+// =====================
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(A, INPUT_PULLUP);
+  pinMode(B, INPUT_PULLUP);
+
+  WiFi.begin(ssid, password);
+
+  Serial.print("Connecting to WiFi");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("\nWiFi Connected!");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP());
+
+  server.on("/", handleRoot);
+  server.begin();
+}
+
+// =====================
+// Loop
+// =====================
+void loop() {
+  server.handleClient();
+}
